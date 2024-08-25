@@ -13,7 +13,7 @@ resource "aws_ecr_repository" "example" {
 
 # Create S3 Bucket for Terraform State and TFVars
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "example-terraform-state-bucket"  # Change bucket name to a unique name
+  bucket = "manasroulecr-terraform-state-bucket"  # Change bucket name to a unique name
   versioning {
     enabled = true
   }
