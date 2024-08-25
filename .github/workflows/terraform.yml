@@ -40,13 +40,13 @@ jobs:
     - name: Output debug information (optional)
       run: |
         echo "AWS Region: ${{ secrets.AWS_REGION }}"
-        aws s3 ls s3://example-terraform-state-bucket --recursive || echo "Error listing S3 bucket"
+        aws s3 ls s3://manasroulecr-terraform-state-bucket --recursive || echo "Error listing S3 bucket"
         aws dynamodb list-tables || echo "Error listing DynamoDB tables"
 
     - name: Upload Terraform state to S3
       if: success()
-      run: aws s3 cp terraform.tfstate s3://example-terraform-state-bucket/terraform.tfstate
+      run: aws s3 cp terraform.tfstate s3://manasroulecr-terraform-state-bucket/terraform.tfstate
 
     - name: Upload TFVars file to S3
       if: success()
-      run: aws s3 cp terraform.tfvars s3://example-terraform-state-bucket/terraform.tfvars
+      run: aws s3 cp terraform.tfvars s3://manasroulecr-terraform-state-bucket/terraform.tfvars
