@@ -13,7 +13,7 @@ resource "aws_ecr_repository" "example" {
 
 # Create S3 Bucket for Terraform State and TFVars
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "manasroulecr-terraform-state-bucket"  # Change bucket name to a unique name
+  bucket = "manas-ecr-terraform-state-bucket123"  # Change bucket name to a unique name
   versioning {
     enabled = true
   }
@@ -48,7 +48,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 # Backend configuration with hardcoded values
 terraform {
   backend "s3" {
-    bucket         = "example-terraform-state-bucket"  # Hardcoded bucket name
+    bucket         = "manas-ecr-terraform-state-bucket123"  # Hardcoded bucket name
     key            = "terraform.tfstate"
     region         = "us-east-1"  # Change this to your desired region
     dynamodb_table = "terraform-locks"  # Hardcoded DynamoDB table name
