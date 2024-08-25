@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-west-2"  # Change this to your desired region
+  region = "us-east-1"  # Change this to your desired region
 }
 
 # Create ECR Repository
@@ -45,13 +45,13 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
-# Backend configuration
+# Backend configuration with hardcoded values
 terraform {
   backend "s3" {
-    bucket         = aws_s3_bucket.terraform_state.bucket
+    bucket         = "example-terraform-state-bucket"  # Hardcoded bucket name
     key            = "terraform.tfstate"
     region         = "us-west-2"  # Change this to your desired region
-    dynamodb_table = aws_dynamodb_table.terraform_locks.name
+    dynamodb_table = "terraform-locks"  # Hardcoded DynamoDB table name
     encrypt        = true
   }
 }
