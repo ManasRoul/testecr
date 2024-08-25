@@ -3,7 +3,7 @@ name: Terraform Deployment
 on:
   push:
     branches:
-      - main
+      - main  # Trigger this workflow on pushes to the main branch
 
 jobs:
   terraform:
@@ -16,20 +16,37 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.5.0  # Update to the latest version as needed
+        terraform_version: 1.6.0  # Updated to the latest stable Terraform version
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2  # Change to your desired region
+        aws-region: us-east-1  # Specify your AWS region
 
-    - name: Terraform Init
+    - name: Initialize Terraform
       run: terraform init
 
-    - name: Terraform Plan
-      run: terraform plan
+    - name: Validate Terraform configuration
+      run: terraform validate
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+    - name: Apply Terraform configuration
+      run: terraform apply -auto-approve tfplan
+
+    - name: Output debug information (optional)
+      run: |
+        echo "AWS Region: ${{ secrets.AWS_REGION }}"
+        aws s3 ls s3://example-terraform-state-bucket --recursive || echo "Error listing S3 bucket"
+        aws dynamodb list-tables || echo "Error listing DynamoDB tables"
+
+    - name: Upload Terraform state to S3
+      if: success()
+      run: aws s3 cp terraform.tfstate s3://example-terraform-state-bucket/terraform.tfstate
+
+    - name: Upload TFVars file to S3
+      if: success()
+      run: aws s3 cp terraform.tfvars s3://example-terraform-state-bucket/terraform.tfvars
