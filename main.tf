@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 # Create ECR Repository
-resource "aws_ecr_repository" "example" {
-  name                 = "example-repo"
+resource "aws_ecr_repository" "example_ecr" {
+  name                 = "example-manas_repo"
   image_tag_mutability = "MUTABLE"
   image_scanning_configuration {
     scan_on_push = true
@@ -12,19 +12,19 @@ resource "aws_ecr_repository" "example" {
 }
 
 # Create S3 Bucket for Terraform State and TFVars
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "manas-ecr-terraform-state-bucket123"  # Change bucket name to a unique name
-  versioning {
-    enabled = true
-  }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-}
+# resource "aws_s3_bucket" "terraform_state" {
+#   bucket = "manas-ecr-terraform-state-bucket123"  # Change bucket name to a unique name
+#   versioning {
+#     enabled = true
+#   }
+#   server_side_encryption_configuration {
+#     rule {
+#       apply_server_side_encryption_by_default {
+#         sse_algorithm = "AES256"
+#       }
+#     }
+#   }
+# }
 
 # Save TFVars file in the S3 Bucket
 resource "aws_s3_bucket_object" "tfvars" {
