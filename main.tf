@@ -40,7 +40,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 
 # Save TFVars file in the S3 Bucket
 resource "aws_s3_bucket_object" "tfvars" {
-  bucket = aws_s3_bucket.terraform_state.bucket
+  bucket = "aws_s3_bucket.terraform_state.bucket"
   key    = "terraform.tfvars"
   source = "terraform.tfvars"  # Assuming tfvars file is in the same directory
 }
