@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"  # Change this to your desired region
+  region = "us-east-1"
 }
 
 # Create ECR Repository
@@ -11,24 +11,9 @@ resource "aws_ecr_repository" "example_ecr" {
   }
 }
 
-# Create S3 Bucket for Terraform State and TFVars
-# resource "aws_s3_bucket" "terraform_state" {
-#   bucket = "manas-ecr-terraform-state-bucket123"  # Change bucket name to a unique name
-#   versioning {
-#     enabled = true
-#   }
-#   server_side_encryption_configuration {
-#     rule {
-#       apply_server_side_encryption_by_default {
-#         sse_algorithm = "AES256"
-#       }
-#     }
-#   }
-# }
-
-# Save TFVars file in the S3 Bucket
+# Upload tfvars to the existing S3 bucket
 resource "aws_s3_bucket_object" "tfvars" {
-  bucket = aws_s3_bucket.terraform_state.bucket
+  bucket = "manas-ecr-terraform-state-bucket123"  # Use your hardcoded bucket name
   key    = "terraform.tfvars"
   source = "terraform.tfvars"  # Assuming tfvars file is in the same directory
 }
@@ -48,10 +33,10 @@ resource "aws_dynamodb_table" "terraform_locks" {
 # Backend configuration with hardcoded values
 terraform {
   backend "s3" {
-    bucket         = "manas-ecr-terraform-state-bucket123"  # Hardcoded bucket name
+    bucket         = "manas-ecr-terraform-state-bucket123"
     key            = "terraform.tfstate"
-    region         = "us-east-1"  # Change this to your desired region
-    dynamodb_table = "terraform-locks"  # Hardcoded DynamoDB table name
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"
     encrypt        = true
   }
 }
